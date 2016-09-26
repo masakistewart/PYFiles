@@ -1,32 +1,68 @@
 # PYFiles
-A Python folder and file system creator.
+A Python folder and file system creator. Edit the code to your heart's content!
 
-- creates nested folders in a predifined order along with any files from the command line
+- Creates nested folders in a predifined order
+- Implementing an auto create system for different frameworks
+	
+	Use -a for an Angular boilerplate
 
-###Example:
+
+
+#####Example:
 		
 		python3 pyfi.py /this/file/path/and/file.txt
 		
-###Output:
+#####Output:
 
 
-		.this
-		|__ file
-		       |__ path
-		       		|__ and
-		       				|__
-		              			file.txt
+		this
+		└── file
+    		└── path
+        		└── and
+            		└── file.txt
 		
 ####If you want to chain multiple folders and files on a same level simply:
 
-
-###Example
-	python3 pyfi.py /folder1+folder2 /folder2/folder3 
+*every branch in a folder must be added this/that+other this/that/thing this/other/text.txt
 
 
-###Output
+#####Example
+	python3 pyfi.py folder1+folder2 /folder2/folder3 
 
 
-		. __ folder1
-		.|__ folder2
-				|_ folder3
+#####Output
+
+
+		    .
+			├── folder1
+			└── folder2
+    			└── folder3
+				
+####You may currently use Auto Create* for angular like so:
+*more frameworks will be added in the future
+
+
+#####Example:
+
+		python3 pyfi.py -a
+		
+#####Output
+
+		app
+		├── public
+		│   ├── css
+		│   ├── fonts
+		│   ├── img
+		│   ├── js
+		│   │   ├── app.js
+		│   │   ├── controllers
+		│   │   └── directives
+		│   ├── model
+		│   └── views
+		│       ├── index.html
+		│       └── templates
+		└── server.js
+
+
+ 
+				

@@ -1,6 +1,6 @@
 import os
 import sys
-from nested.py import write_to_file
+from nested import write_to_file
 
 html_boilerplate = """
 <!DOCTYPE html>
@@ -14,9 +14,14 @@ html_boilerplate = """
 """
 server_boilerplate = """
 var express = require('express');
-var app     = express()
+var app     = express();
+var port    = 8000;
 
-app.use(express.static('/public'))
+app.use(express.static('/public'));
+
+app.get('*', function(req, res) {
+    res.sendFile(__dirname + '/public/views/index.html')
+})
 """
 
 
@@ -36,21 +41,11 @@ def usage():
     print("out put!")
 
 
-# sample command /project/public/js+css+img+views
-
-# os.path.exists
-# then
-# os.makedir
-
-# get current directory
-# cwd = os.getcwd()
-
 def create_file(file_name, path):
     file = open(path +file_name, 'w')
     file.close()
 
 
-# takes a string that looks like: python+me.py
 def file_check(string):
     if "." in string:
         return True
@@ -70,15 +65,19 @@ def logic_section(args):
                 for sibling in siblings:
                     if file_check(sibling):
                         create_file(sibling, cwd + '/')
+                        if sibling == "server.js":
+                            write_to_file(cwd + '/' + sibling, server_boilerplate)
+                        elif sibling == 'index.html':
+                            write_to_file(cwd + '/' + sibling, html_boilerplate)
                     else:
                         os.mkdir(cwd + "/" + sibling)
             else:
                 if file_check(file):
                     create_file(file, cwd + '/')
                     if file == "server.js":
-                        write_to_file(cwd+'/', server_boilerplate)
+                        write_to_file(cwd + '/' + file, server_boilerplate)
                     elif file == 'index.html':
-                        write_to_file(cwd+'/', html_boilerplate)
+                        write_to_file(cwd + '/' + file, html_boilerplate)
                 elif not os.path.exists(cwd + '/' + file):
                     print(cwd, 'otherHere')
                     os.mkdir(cwd + "/" + file)
