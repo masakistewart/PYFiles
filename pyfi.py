@@ -1,10 +1,23 @@
 import os
 import sys
+from nested.py import write_to_file
 
-# the problem I am facing is that once the branch splits how can I continue the tree?
-# can I also do it using recursion?
+html_boilerplate = """
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+    </body>
+</html>
+"""
+server_boilerplate = """
+var express = require('express');
+var app     = express()
 
-
+app.use(express.static('/public'))
+"""
 
 
 # get current working directory
@@ -32,8 +45,8 @@ def usage():
 # get current directory
 # cwd = os.getcwd()
 
-def create_file(file_name):
-    file = open(file_name, 'w')
+def create_file(file_name, path):
+    file = open(path +file_name, 'w')
     file.close()
 
 
@@ -45,8 +58,6 @@ def file_check(string):
         return False
 
 
-    # currently broken need to fix the passing of cwd from function to function
-    # also build another set of functions to handle branching and subfiles
 def logic_section(args):
     for path in args:
         cwd = os.getcwd()
@@ -58,15 +69,21 @@ def logic_section(args):
                 print(cwd, siblings)
                 for sibling in siblings:
                     if file_check(sibling):
-                        create_file(sibling)
-                    os.mkdir(cwd + "/" + sibling)
+                        create_file(sibling, cwd + '/')
+                    else:
+                        os.mkdir(cwd + "/" + sibling)
             else:
                 if file_check(file):
-                    create_file(file)
-                elif not os.path.exists(cwd + '/' + file) and not "." in file:
+                    create_file(file, cwd + '/')
+                    if file == "server.js":
+                        write_to_file(cwd+'/', server_boilerplate)
+                    elif file == 'index.html':
+                        write_to_file(cwd+'/', html_boilerplate)
+                elif not os.path.exists(cwd + '/' + file):
                     print(cwd, 'otherHere')
                     os.mkdir(cwd + "/" + file)
                 cwd += "/" + file
+
 
 def main():
     if not len(sys.argv[1:]):
@@ -76,7 +93,7 @@ def main():
     args = sys.argv[1:]
 
     if args[0] == '-a':
-        path = ['app/public/css+model+fonts+img+js+views', 'app/server.js', 'app/public/views/templates+index.html', 'app/public/js/controllers+directives+app.js' ]
+        path = ['app/public/css+model+fonts+img+js+views', 'app/model+server.js', 'app/public/js/controllers+directives+app.js','app/public/views/templates+index.html' ]
         logic_section(path)
     else:
         logic_section(args)
